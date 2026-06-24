@@ -1,26 +1,23 @@
-## 组件清单文件
-## 参考：https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/tools/idf-component-manager.html
-# https://github.com/nczy520/esp_idf_logs_spiffs.git
-# 组件名称（必填）
-name: "esp_idf_logs_spiffs"
-# 版本号（必填，语义化版本）
-version: "1.0.0"
-# 描述（可选）
-description: "A template component for ESP-IDF"
-# GIT 仓库 URL
-url: "https://github.com/nczy520/esp_idf_logs_spiffs"
-# 目标芯片（可选，留空表示通用）
-targets:
-  - esp32
-  - esp32s2
-  - esp32s3
-  - esp32c3
-  - esp32c6
-  - esp32h2
-# 依赖关系（可选）
 dependencies:
-  idf: ">=5.0.0"   # 依赖 ESP-IDF 版本
-  # 可以依赖其他组件，例如：
-  # some_other_component:
-  #   version: "~1.2.0"
-  #   public: true   # 若需要传递依赖
+  idf:
+    version: '>=5.0.0'
+description: "A template component for ESP-IDF"
+license: GPL-3.0-or-later
+repository: https://github.com/nczy520/esp_idf_logs_spiffs.git
+repository_info:
+  path: .
+tags:
+- wifi
+- provisioning
+- captive-portal
+- wifimanager
+- nvs
+- softap
+targets:
+- esp32
+- esp32s2
+- esp32s3
+- esp32c3
+- esp32c6
+url: https://github.com/nczy520/esp_idf_logs_spiffs
+version: 1.0.0

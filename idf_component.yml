@@ -2,7 +2,9 @@ version: "1.0.0"
 description: "A template component for ESP-IDF"
 license: "GPL-3.0-or-later"
 url: "https://github.com/nczy520/esp_idf_logs_spiffs"
-repository: "https://github.com/nczy520/esp_idf_logs_spiffs.git"
+repository: 
+  type: "git"
+  url: "https://github.com/nczy520/esp_idf_logs_spiffs.git"
 tags:
   - wifi
   - provisioning

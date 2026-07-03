@@ -1,5 +1,9 @@
 # esp-idf-logs-spiffs
 
+[![Component](https://img.shields.io/badge/ESP--IDF-6.0%2B-blue)](https://docs.espressif.com/projects/esp-idf/)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+[![Target](https://img.shields.io/badge/target-ESP32--S3-orange)](https://www.espressif.com/en/products/socs/esp32-s3)
+
 一个面向 ESP-IDF 的 SPIFFS 日志组件，提供自动轮转、空间控制和线程安全写入能力，适合在设备端把运行日志落盘到 SPIFFS 分区。
 
 ## 组件特性

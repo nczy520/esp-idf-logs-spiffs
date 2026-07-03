@@ -1,9 +1,11 @@
 idf_component_register(
-    SRCS 
-        "./src/logs_spiffs.c"
+    SRCS
+        "src/logs_spiffs.c"
     INCLUDE_DIRS
-        "./include"
+        "include"
     REQUIRES
-        nvs_flash
-    # PRIV_REQUIRES  # 私有依赖
+        spiffs
+        esp_system
+        esp_timer
+        freertos
 )

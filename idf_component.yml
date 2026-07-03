@@ -1,15 +1,17 @@
-version: "1.0.0"
-description: "A template component for ESP-IDF"
+version: "1.1.0"
+description: "SPIFFS-based log manager for ESP-IDF with automatic rotation and space control."
 license: "GPL-3.0-or-later"
-url: "https://github.com/nczy520/esp_idf_logs_spiffs"
-repository: "https://github.com/nczy520/esp_idf_logs_spiffs.git"
+url: "https://github.com/nczy520/esp-idf-logs-spiffs"
+repository: "https://github.com/nczy520/esp-idf-logs-spiffs.git"
+documentation: "https://github.com/nczy520/esp-idf-logs-spiffs#readme"
+issues: "https://github.com/nczy520/esp-idf-logs-spiffs/issues"
+maintainers:
+  - "nczy520"
 tags:
-  - wifi
-  - provisioning
-  - captive-portal
-  - wifimanager
-  - nvs
-  - softap
+  - logging
+  - spiffs
+  - filesystem
+  - storage
 targets:
   - esp32
   - esp32s2
@@ -22,3 +24,5 @@ dependencies:
 files:
   exclude:
     - ".github/**/*"
+    - "build/**/*"
+    - ".vscode/**/*"

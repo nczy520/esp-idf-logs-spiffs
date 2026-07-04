@@ -142,21 +142,8 @@ void logs_spiffs_worker_stop(void) {
         xSemaphoreTake(g_logs_spiffs.log_task_done, portMAX_DELAY);
     }
 
-    if (g_logs_spiffs.log_queue != NULL) {
-        vQueueDelete(g_logs_spiffs.log_queue);
-        g_logs_spiffs.log_queue = NULL;
-    }
-
-    if (g_logs_spiffs.log_task_done != NULL) {
-        vSemaphoreDelete(g_logs_spiffs.log_task_done);
-        g_logs_spiffs.log_task_done = NULL;
-    }
-
-    if (g_logs_spiffs.log_mutex != NULL) {
-        vSemaphoreDelete(g_logs_spiffs.log_mutex);
-        g_logs_spiffs.log_mutex = NULL;
-    }
-
+    /* Leave deletion of semaphores/queue/mutex to the deinit path.
+     * Here we only wait for the worker task to finish and clear the task handle. */
     g_logs_spiffs.log_task = NULL;
 }
 

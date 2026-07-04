@@ -11,8 +11,8 @@ esp_err_t logs_spiffs_format(void) {
     ESP_LOGI(TAG, "Formatting SPIFFS partition...");
     esp_err_t ret = logs_spiffs_storage_format();
     if (ret == ESP_OK) {
-        ESP_LOGI(TAG, "Format successful! Restarting...");
-        esp_restart();
+        ESP_LOGI(TAG, "Format successful");
+        /* Return to caller instead of restarting; caller may decide next steps. */
     } else {
         ESP_LOGE(TAG, "Format failed: %s", esp_err_to_name(ret));
     }
@@ -75,6 +75,25 @@ void logs_spiffs_write_level(logs_spiffs_level_t level, const char *format, ...)
 }
 
 void logs_spiffs_deinit(void) {
+    /* Request worker stop and wait for it to finish flushing queued items. */
     logs_spiffs_worker_stop();
+
+    /* Now deinitialize storage (safe because worker has finished). */
     logs_spiffs_storage_deinit();
+
+    /* Clean up remaining synchronization primitives and queue. */
+    if (g_logs_spiffs.log_queue != NULL) {
+        vQueueDelete(g_logs_spiffs.log_queue);
+        g_logs_spiffs.log_queue = NULL;
+    }
+
+    if (g_logs_spiffs.log_task_done != NULL) {
+        vSemaphoreDelete(g_logs_spiffs.log_task_done);
+        g_logs_spiffs.log_task_done = NULL;
+    }
+
+    if (g_logs_spiffs.log_mutex != NULL) {
+        vSemaphoreDelete(g_logs_spiffs.log_mutex);
+        g_logs_spiffs.log_mutex = NULL;
+    }
 }

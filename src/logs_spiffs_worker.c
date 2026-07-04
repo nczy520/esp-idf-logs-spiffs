@@ -10,7 +10,9 @@ logs_spiffs_context_t g_logs_spiffs = {0};
 static logs_spiffs_level_t s_current_level = LOGS_SPIFFS_LEVEL_INFO;
 
 static bool logs_spiffs_should_emit(logs_spiffs_level_t level) {
-    return level >= s_current_level;
+    /* Atomic read so set_level() can be called from any thread without a lock. */
+    logs_spiffs_level_t current = __atomic_load_n(&s_current_level, __ATOMIC_SEQ_CST);
+    return level >= current;
 }
 
 static void logs_spiffs_worker_task(void *arg) {
@@ -62,7 +64,9 @@ flush_batch:
             if (!logs_spiffs_storage_write_line(batch[i].message, ms)) {
                 ESP_LOGW(TAG, "Failed to persist queued log entry");
             }
-            printf("[+%lld ms] %s\n", (long long)ms, batch[i].message);
+            /* Console echo is DEBUG-only to avoid flooding serial output in
+             * production. Enable with: esp_log_level_set("LOG_MGR", ESP_LOG_DEBUG); */
+            ESP_LOGD(TAG, "[+%lld ms] %s", (long long)ms, batch[i].message);
         }
         batch_count = 0;
         last_flush = xTaskGetTickCount();
@@ -74,7 +78,7 @@ flush_batch:
             if (!logs_spiffs_storage_write_line(batch[i].message, ms)) {
                 ESP_LOGW(TAG, "Failed to persist queued log entry");
             }
-            printf("[+%lld ms] %s\n", (long long)ms, batch[i].message);
+            ESP_LOGD(TAG, "[+%lld ms] %s", (long long)ms, batch[i].message);
         }
     }
 
@@ -207,9 +211,9 @@ bool logs_spiffs_worker_enqueue_formatted(logs_spiffs_level_t level, const char 
 }
 
 void logs_spiffs_worker_set_level(logs_spiffs_level_t level) {
-    s_current_level = level;
+    __atomic_store_n(&s_current_level, level, __ATOMIC_SEQ_CST);
 }
 
 logs_spiffs_level_t logs_spiffs_worker_get_level(void) {
-    return s_current_level;
+    return __atomic_load_n(&s_current_level, __ATOMIC_SEQ_CST);
 }

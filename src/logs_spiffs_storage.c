@@ -168,20 +168,8 @@ static bool ensure_free_space_unlocked(size_t required_bytes) {
     size_t need_to_free = required_bytes - free_bytes;
     int prev_deleted = -1;
     while (free_bytes < required_bytes) {
-        char **files = NULL;
-        int file_count = 0;
-        if (get_sorted_log_files_unlocked(&files, &file_count) != ESP_OK) {
-            if (files) free(files);
-            break;
-        }
-        for (int i = 0; i < file_count; i++) free(files[i]);
-        free(files);
-
-        if (file_count == 0) break;
-        if (file_count <= (int)cfg.max_log_files && prev_deleted == 0) {
-            break;
-        }
-
+        /* delete_oldest_logs_unlocked already handles the empty/keep cases:
+         * it returns 0 when there is nothing to delete, which breaks below. */
         int deleted = delete_oldest_logs_unlocked((int)cfg.max_log_files, need_to_free);
         if (deleted == 0) break;
 
@@ -216,10 +204,24 @@ static int get_next_log_number_unlocked(void) {
         }
         free(files);
     }
-    if (max_num >= 999999) {
-        max_num = 0;
+
+    if (max_num < 999999) {
+        return max_num + 1;
     }
-    return max_num + 1;
+
+    /* Wraparound: find the smallest unused number by probing file existence.
+     * enforce_max_file_count_unlocked() runs before this in the rotation path,
+     * so free slots are guaranteed when max_log_files < 999999. */
+    for (int candidate = 1; candidate <= 999999; ++candidate) {
+        char path[64];
+        generate_log_path(path, candidate);
+        struct stat st;
+        if (stat(path, &st) != 0) {
+            return candidate;
+        }
+    }
+    ESP_LOGW(TAG, "All log number slots in use, reusing 1");
+    return 1;
 }
 
 static void generate_log_path(char *out_path, int number) {
@@ -349,22 +351,21 @@ void logs_spiffs_storage_list_existing(void) {
         return;
     }
 
-    printf("========== Existing log files ==========" "\n");
-    ESP_LOGI(TAG, "Existing log files (sorted by number):");
+    ESP_LOGI(TAG, "========== Existing log files (sorted) ==========");
     for (int i = 0; i < file_count; i++) {
         const char *path = files[i];
         const char *name = strrchr(path, '/');
         name = name ? name + 1 : path;
         struct stat st;
         if (stat(path, &st) == 0) {
-            printf("  /spiffs/%s  (%ld bytes)\n", name, (long)st.st_size);
+            ESP_LOGI(TAG, "  /spiffs/%s  (%ld bytes)", name, (long)st.st_size);
         } else {
-            printf("  /spiffs/%s  (size unknown)\n", name);
+            ESP_LOGI(TAG, "  /spiffs/%s  (size unknown)", name);
         }
         free(files[i]);
     }
     free(files);
-    printf("========================================\n");
+    ESP_LOGI(TAG, "================================================");
 }
 
 esp_err_t logs_spiffs_storage_format(void) {

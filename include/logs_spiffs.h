@@ -48,7 +48,9 @@ void logs_spiffs_write_level(logs_spiffs_level_t level, const char *format, ...)
 
 /**
  * @brief 格式化 SPIFFS 分区（擦除所有数据），然后重启系统
- * @return ESP_OK 成功（实际不会返回，因为会重启），否则返回错误码
+ * @note 成功时调用 esp_restart()，函数不会返回；失败时返回错误码。
+ *       调用方无需在成功路径上做后续处理。
+ * @return 成功时不返回；失败时返回 esp_err_t 错误码
  */
 esp_err_t logs_spiffs_format(void);
 

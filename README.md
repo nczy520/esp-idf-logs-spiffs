@@ -12,12 +12,14 @@
 - 超过大小时自动切换文件
 - 低空间时自动清理旧日志
 - 通过队列和后台工作线程串行化写入，避免多线程同时写入 SPIFFS 文件造成竞争
+- 批量写入（最多 8 条或 200ms 触发一次 flush），降低 SPIFFS 写放大开销
+- 日志级别过滤（INFO / WARN / ERROR）
 - 代码按模块拆分，便于维护：存储层、工作线程层、公共接口层
 - 可直接作为 ESP-IDF 组件被其他项目引用
 
 ## 在项目中使用
 
-在你的应用项目的 idf_component.yml 中添加依赖：
+在你的应用项目的 `idf_component.yml` 中添加依赖：
 
 ```yaml
 dependencies:
@@ -54,10 +56,20 @@ void app_main(void) {
 
 ### 说明
 
-- `logs_spiffs_set_level()` 用来设置最低记录级别，低于该级别的消息会被直接丢弃。
+- `logs_spiffs_set_level()` 用来设置最低记录级别，低于该级别的消息会被直接丢弃。该接口是线程安全的（原子读写）。
 - `logs_spiffs_write()` 会写入默认级别的 INFO 日志。
 - `logs_spiffs_write_level()` 可显式指定 `INFO/WARN/ERROR`。
 - `logs_spiffs_rotation_config_*()` 可以调整轮转阈值、最大文件大小、保留文件数和最低剩余空间。
+- `logs_spiffs_format()` 会擦除整个 SPIFFS 分区并在成功后调用 `esp_restart()` 重启系统，**成功时不会返回**，调用方无需在成功路径上做后续处理。
+
+### 控制台日志输出
+
+组件内部所有状态信息通过 `ESP_LOGI/ESP_LOGW/ESP_LOGE` 输出，TAG 为 `LOG_MGR`。落盘日志的同步回显默认关闭（使用 `ESP_LOGD`），如需在串口实时查看写入的日志内容，可启用：
+
+```c
+#include "esp_log.h"
+esp_log_level_set("LOG_MGR", ESP_LOG_DEBUG);
+```
 
 ## 示例工程
 
@@ -81,15 +93,27 @@ idf.py flash monitor
 
 ## API
 
-- logs_spiffs_init()
-- logs_spiffs_set_level()
-- logs_spiffs_write()
-- logs_spiffs_write_level()
-- logs_spiffs_deinit()
-- logs_spiffs_format()
-- logs_spiffs_rotation_config_default()
-- logs_spiffs_rotation_config_set()
-- logs_spiffs_rotation_config_get()
+| 函数 | 说明 |
+|------|------|
+| `logs_spiffs_init()` | 初始化：挂载 SPIFFS，启动 worker，创建初始日志文件 |
+| `logs_spiffs_deinit()` | 反初始化：停止 worker，关闭文件，卸载 SPIFFS |
+| `logs_spiffs_set_level()` | 设置最低日志级别 |
+| `logs_spiffs_write()` | 写入一条 INFO 级别日志 |
+| `logs_spiffs_write_level()` | 写入一条指定级别日志 |
+| `logs_spiffs_format()` | 擦除 SPIFFS 分区并重启（成功不返回） |
+| `logs_spiffs_rotation_config_default()` | 获取默认轮转配置 |
+| `logs_spiffs_rotation_config_set()` | 设置当前轮转配置 |
+| `logs_spiffs_rotation_config_get()` | 读取当前轮转配置 |
+
+### 默认轮转配置
+
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| `min_free_space_bytes` | 256 KB | 触发清理前的最低剩余空间 |
+| `max_file_size_bytes` | 512 KB | 单个日志文件最大尺寸 |
+| `max_log_files` | 99 | 保留的日志文件数量上限 |
+| `rotate_threshold_bytes` | 8 KB | 创建新文件前需保证的最小可用空间 |
+| `max_files_open` | 5 | SPIFFS 允许同时打开的文件数量 |
 
 ## 许可证
 

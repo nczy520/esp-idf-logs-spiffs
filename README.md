@@ -20,7 +20,8 @@ esp-idf-logs-spiffs/
 │   └── basic/                # 示例工程
 │       ├── main/
 │       ├── CMakeLists.txt
-│       └── idf_component.yml
+│       ├── partitions.csv
+│       └── sdkconfig.defaults
 ├── LICENSE
 └── README.md
 ```
@@ -45,7 +46,7 @@ dependencies:
   esp_logs_spiffs:
     git: https://github.com/nczy520/esp-idf-logs-spiffs.git
     path: esp_logs_spiffs
-    version: main
+    branch: main
 ```
 
 然后在应用代码中调用：

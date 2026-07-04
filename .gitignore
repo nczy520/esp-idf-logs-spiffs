@@ -63,8 +63,13 @@ env/
 
 # Language Servers
 .clangd/
+.clangd
 .ccls-cache/
 compile_commands.json
+
+# ESP-IDF component manager lock files
+dependencies.lock
+**/dependencies.lock
 
 # Windows specific
 Thumbs.db

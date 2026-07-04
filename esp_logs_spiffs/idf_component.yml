@@ -23,6 +23,6 @@ dependencies:
     version: ">=6.0.0"
 files:
   exclude:
-    - ".github/**/*"
     - "build/**/*"
     - ".vscode/**/*"
+    - "*.lock"

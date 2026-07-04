@@ -7,6 +7,24 @@
 
 一个面向 ESP-IDF 的 SPIFFS 日志组件，提供自动轮转、空间控制和线程安全写入能力，适合在设备端把运行日志落盘到 SPIFFS 分区。
 
+## 项目结构
+
+```
+esp-idf-logs-spiffs/
+├── esp_logs_spiffs/          # 组件源码（ESP-IDF 组件）
+│   ├── include/
+│   ├── src/
+│   ├── CMakeLists.txt
+│   └── idf_component.yml
+├── examples/
+│   └── basic/                # 示例工程
+│       ├── main/
+│       ├── CMakeLists.txt
+│       └── idf_component.yml
+├── LICENSE
+└── README.md
+```
+
 ## 组件特性
 
 - 自动创建并轮转日志文件
@@ -24,8 +42,9 @@
 
 ```yaml
 dependencies:
-  logs-spiffs:
+  esp_logs_spiffs:
     git: https://github.com/nczy520/esp-idf-logs-spiffs.git
+    path: esp_logs_spiffs
     version: main
 ```
 

@@ -1,3 +1,0 @@
-dependencies:
-  esp_logs_spiffs:
-    path: ../../esp_logs_spiffs

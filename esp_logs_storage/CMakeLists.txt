@@ -1,0 +1,20 @@
+idf_component_register(
+    SRCS
+        "src/logs_storage.c"
+        "src/logs_storage_backend.c"
+        "src/logs_storage_file_utils.c"
+        "src/logs_storage_buffer.c"
+        "src/logs_storage_usb.c"
+        "src/logs_storage_usb_msc.c"
+        "src/logs_storage_worker.c"
+        "src/logs_storage_rotation.c"
+    INCLUDE_DIRS
+        "include"
+    REQUIRES
+        fatfs
+        wear_levelling
+        esp_tinyusb
+        esp_system
+        esp_timer
+        freertos
+)

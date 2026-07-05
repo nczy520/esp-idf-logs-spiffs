@@ -1,6 +1,11 @@
 /**
  * @file web_ui.c
  * @brief Web UI 处理器（HTML 页面）
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 #include "logs_storage_internal.h"
 #include "esp_http_server.h"

@@ -3,6 +3,11 @@
  * @brief esp_logs_storage 公共 API 入口
  *
  * 纯队列驱动，线程安全。
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 
 #include "logs_storage.h"

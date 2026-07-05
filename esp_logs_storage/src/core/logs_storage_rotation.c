@@ -5,6 +5,11 @@
  * 提供默认值与运行时 get/set 接口。
  * 配置项含义见 logs_storage_rotation.h 字段注释。
  * 注意：set 不是线程安全的，应在 init 之前调用。
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 
 #include "logs_storage_rotation.h"

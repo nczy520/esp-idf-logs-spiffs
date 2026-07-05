@@ -1,6 +1,11 @@
 /**
  * @file web_api.c
  * @brief HTTP API 处理器（RESTful API）
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 #include "logs_storage_internal.h"
 #include "esp_spiffs.h"

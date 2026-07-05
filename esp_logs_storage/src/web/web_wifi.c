@@ -1,6 +1,11 @@
 /**
  * @file web_wifi.c
  * @brief WiFi AP 管理模块
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 #include "logs_storage_internal.h"
 #include "logs_storage_web_config.h"

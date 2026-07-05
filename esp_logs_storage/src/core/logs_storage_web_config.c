@@ -1,6 +1,11 @@
 /**
  * @file logs_storage_web_config.c
  * @brief Web 服务配置：默认值、set/get
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 
 #include "logs_storage_web_config.h"

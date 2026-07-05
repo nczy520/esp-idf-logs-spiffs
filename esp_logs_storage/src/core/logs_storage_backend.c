@@ -3,6 +3,11 @@
  * @brief 存储后端核心：SPIFFS 挂载、日志轮转、写入入口
  *
  * 纯队列驱动，worker 任务独占所有文件操作，无需任何互斥锁。
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 
 #include "logs_storage_internal.h"

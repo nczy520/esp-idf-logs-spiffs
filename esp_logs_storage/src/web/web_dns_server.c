@@ -1,6 +1,11 @@
 /**
  * @file web_dns_server.c
  * @brief DNS 服务器 - 将所有域名解析指向设备 IP（Captive Portal 核心）
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 #include "logs_storage_internal.h"
 #include "lwip/sockets.h"

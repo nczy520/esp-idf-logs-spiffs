@@ -1,4 +1,4 @@
-version: "2.0.0"
+version: "2.0.1"
 description: "Storage-backed log manager for ESP-IDF with automatic rotation and space control (SPIFFS backend)."
 license: "Apache-2.0"
 url: "https://github.com/nczy520/esp-idf-logs-storage"

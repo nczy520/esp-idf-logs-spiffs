@@ -3,6 +3,11 @@
  * @brief 日志文件工具：文件名解析、枚举、排序、清理、编号、空间查询
  *
  * 所有函数由 worker 任务独占调用，不需要任何锁保护。
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 
 #include "logs_storage_internal.h"

@@ -6,6 +6,11 @@
  * - 前端线程只负责入队（无锁快速路径）
  * - 后端 worker 任务串行处理所有操作
  * - 所有文件 I/O 由 worker 独占执行，零竞争
+ *
+ * @author 路灯
+ * @version 2.0.1
+ * @date 2026-07-06
+ * @contact support@mdeve.com
  */
 
 #include "logs_storage_internal.h"
